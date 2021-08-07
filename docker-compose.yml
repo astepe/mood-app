@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  mood-app:
+    build:
+      context: $PWD
+      dockerfile: $PWD/Dockerfile
+    command: gunicorn --bind 0.0.0.0:5000 wsgi:app
+    ports:
+      - 5000:5000
+    env_file:
+      - $PWD/.env
+    depends_on:
+      - mood-db
+    networks: 
+      - default
+  mood-db:
+    image: postgres:13-alpine
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - default
+    env_file:
+      - $PWD/.env
+
+
+volumes:
+  postgres_volume:

@@ -46,7 +46,7 @@ curl --location --request POST 'http://0.0.0.0:5000/user' \
     "username": "joeSchmo"
 }
 ```
-#### Getting all User's Moods
+#### Getting User Mood Data
 Get a user's current mood and streak data by providing the username and password as an HTTP Basic Auth header (`-u` flag when using `curl`).
 ##### Request
 ```

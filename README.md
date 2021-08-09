@@ -10,7 +10,7 @@ Register a new user onto the mood-app, login everyday and record your mood to ma
 
 ### Dependencies
 
-* Docker v20
+* Docker
 
 ### Installing
 

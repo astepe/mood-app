@@ -172,7 +172,7 @@ def create_mood_response() -> dict:
         "moodHistory": [
             {
                 "mood": mood.mood.name,
-                "date": mood.date.strftime("%a, %b %d at %I:%M %p"),
+                "date": mood.date.strftime("%a, %b %d %Y at %I:%M %p"),
             }
             for mood in g.user.moods
         ],

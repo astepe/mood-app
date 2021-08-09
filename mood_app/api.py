@@ -185,6 +185,17 @@ def create_mood_response() -> dict:
 
 
 def validate_request(instance: dict, schema: dict) -> Tuple[bool, str]:
+    """Validate the provided instance against the
+    provided schema. If in valid, return the error
+    message explaining the failure.
+
+    Args:
+        instance (dict): The instance to validate
+        schema (dict): The schema used to validation
+
+    Returns:
+        Tuple[bool, str]: True if valid, error message if invalid.
+    """
     try:
         validate(instance=instance, schema=schema)
     except ValidationError as error:

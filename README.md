@@ -30,6 +30,7 @@ docker compose up --build
 
 ### Usage
 #### Registering a New User
+Register a new user by providing a username and password.
 request:
 ```
 curl --location --request POST 'http://0.0.0.0:5000/user' \
@@ -46,6 +47,7 @@ response:
 }
 ```
 #### Getting all User's Moods
+Get a user's current mood and streak data by providing the username and password as an HTTP Basic Auth header.
 request:
 ```
 curl -u joeSchmo:1234 --location --request GET 'http://0.0.0.0:5000/mood'
@@ -64,6 +66,17 @@ response:
 }
 ```
 #### Logging a User's Mood
+Record a new mood for the user by providing a mood from the following choices:
+* `"CHEERFUL"`
+* `"REFLECTIVE"`
+* `"GLOOMY"`
+* `"HUMOROUS"`
+* `"MELANCHOLY"`
+* `"IDYLLIC"`
+* `"WHIMSICAL"`
+* `"ROMANTIC"`
+
+A new mood will be recorded for the current date and time. Provide an optional epoch timestamp to record a mood for a different date and time.
 request:
 ```
 curl -u joeSchmo:1234 --location --request POST 'http://0.0.0.0:5000/mood' \

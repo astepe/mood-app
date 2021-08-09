@@ -49,6 +49,7 @@ def mood_post():
         calculate_streaks(new_mood)
     g.user.moods.append(new_mood)
     response = create_mood_response()
+    app.session.merge(g.user)
     app.session.commit()
 
     return jsonify(response), 200

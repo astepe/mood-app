@@ -45,7 +45,6 @@ response:
     "username": "joeSchmo"
 }
 ```
-response:
 #### Getting all User's Moods
 request:
 ```

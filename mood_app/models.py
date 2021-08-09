@@ -32,7 +32,7 @@ class User(Base):
     """
     __tablename__ = "user"
     id = sa.Column(sa.Integer, primary_key=True)
-    username = sa.Column(sa.String(20), nullable=False, unique=True)
+    username = sa.Column(sa.String(20), nullable=False, unique=True, index=True)
     password_hash = sa.Column(sa.String(128), nullable=False)
     current_streak = sa.Column(sa.Integer, nullable=False, default=0)
     longest_streak = sa.Column(sa.Integer, nullable=False, default=0)
@@ -65,6 +65,7 @@ class User(Base):
             f"longest_streak: {self.longest_streak}, \n"
             f"streak_ranking: {self.streak_ranking}"
         )
+
 
 class Mood(Base):
     """

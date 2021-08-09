@@ -63,7 +63,7 @@ class User(Base):
             f"<User> username: {self.username}, \n"
             f"current_streak: {self.current_streak}, \n"
             f"longest_streak: {self.longest_streak}, \n"
-            f"streak_ranking: {self.streak_ranking}"
+            f"streak_percentile: {self.streak_percentile}"
         )
 
 

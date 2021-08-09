@@ -11,7 +11,7 @@ from flask_httpauth import HTTPBasicAuth
 from jsonschema import ValidationError, validate
 from sqlalchemy import asc
 
-from .models import MetaData, Mood, MoodEnum, User
+from .models import Mood, MoodEnum, User
 from . import schemas
 
 auth = HTTPBasicAuth()
@@ -141,14 +141,16 @@ def calculate_streaks(new_mood: Mood) -> None:
                 .with_for_update()
                 .all()
             )
-            ranking = 0
             longest_streak = -1
+            count = 0
+            users_below = 0
             for user in users:
                 if user.longest_streak > longest_streak:
-                    ranking += 1
+                    users_below = count
                 longest_streak = user.longest_streak
-                user.streak_ranking = ranking
+                user.streak_percentile = round((users_below / len(users)) * 100, 2)
                 app.session.merge(user)
+                count += 1
 
 
 def create_mood_response() -> dict:
@@ -175,10 +177,8 @@ def create_mood_response() -> dict:
         ],
     }
 
-    user_count = app.session.query(MetaData).first().user_count
-    streak_percentile = ((g.user.streak_ranking - 1) / user_count) * 100
-    # if streak_percentile >= 50:
-    response["streakPercentile"] = streak_percentile
+    if g.user.streak_percentile >= 50:
+        response["streakPercentile"] = g.user.streak_percentile
 
     return response
 

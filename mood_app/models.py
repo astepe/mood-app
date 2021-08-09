@@ -36,7 +36,7 @@ class User(Base):
     password_hash = sa.Column(sa.String(128), nullable=False)
     current_streak = sa.Column(sa.Integer, nullable=False, default=0)
     longest_streak = sa.Column(sa.Integer, nullable=False, default=0)
-    streak_ranking = sa.Column(sa.Integer, nullable=True, default=0)
+    streak_percentile = sa.Column(sa.Float, nullable=True, default=0.0)
     moods = relationship("Mood", cascade="all, delete")
 
     def __init__(self, username, password):
@@ -78,71 +78,3 @@ class Mood(Base):
         sa.Integer, sa.ForeignKey("user.id", ondelete="CASCADE"), index=True, nullable=False
     )
     date = sa.Column(sa.DateTime(), default=sa.func.now())
-
-
-class MetaData(Base):
-    """
-    Stores the current user count to
-    prevent the need to scan all rows in
-    the user table.
-    """
-    __tablename__ = "metadata"
-    id = sa.Column(sa.Integer, primary_key=True)
-    user_count = sa.Column(sa.Integer, nullable=False, default=0)
-
-
-def set_postgres_event_listeners():
-    """
-    Add a postgres trigger function that
-    keeps a running count of all users in the database.
-    This helps prevent running a full scan of
-    the users table when an exact count of
-    all users is needed.
-    """
-    user = sa.inspect(User).local_table
-    metadata = sa.inspect(MetaData).local_table
-    postgres_function = sa.DDL(
-        """
-        CREATE OR REPLACE FUNCTION public.user_count_trigger_function()
-        RETURNS trigger
-        LANGUAGE plpgsql
-        AS $function$
-        BEGIN
-        IF (TG_OP = 'INSERT') THEN
-            UPDATE metadata SET user_count = user_count + 1 WHERE id = 0;
-        RETURN NEW;
-        END IF;
-        END;
-        $function$
-        """
-    )
-
-    insert_metadata_row = sa.DDL(
-        """
-        INSERT INTO metadata VALUES (0, 0);
-        """
-    )
-
-    postgres_trigger = sa.DDL(
-        """
-        CREATE TRIGGER user_after_insert_trigger AFTER INSERT ON public.user EXECUTE FUNCTION user_count_trigger_function()
-        """
-    )
-
-    sa.event.listen(
-        user,
-        "after_create",
-        postgres_function.execute_if(dialect="postgresql")
-    )
-    sa.event.listen(
-        user,
-        "after_create",
-        postgres_trigger.execute_if(dialect="postgresql")
-    )
-    sa.event.listen(
-        metadata,
-        "after_create",
-        insert_metadata_row.execute_if(dialect="postgresql")
-    )
-
-set_postgres_event_listeners()

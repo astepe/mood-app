@@ -16,14 +16,14 @@ Register a new user onto the mood-app, login everyday and record your mood to ma
 
 * Clone this repository onto your local system using `git clone https://github.com/astepe/mood-app.git`
 
-### Starting Containers
+### Starting the Application
 
 1. Move into the top-level directory
 ```
 cd mood-app/
 ```
 
-2. Run Docker Compose
+2. Start the application
 ```
 docker compose up --build
 ```
@@ -31,7 +31,7 @@ docker compose up --build
 ### Usage
 #### Registering a New User
 Register a new user by providing a username and password.
-request:
+##### Request
 ```
 curl --location --request POST 'http://0.0.0.0:5000/user' \
 --header 'Content-Type: application/json' \
@@ -40,19 +40,19 @@ curl --location --request POST 'http://0.0.0.0:5000/user' \
     "password": "1234"
 }'
 ```
-response:
+##### Response
 ```
 {
     "username": "joeSchmo"
 }
 ```
 #### Getting all User's Moods
-Get a user's current mood and streak data by providing the username and password as an HTTP Basic Auth header.
-request:
+Get a user's current mood and streak data by providing the username and password as an HTTP Basic Auth header (`-u` flag when using `curl`).
+##### Request
 ```
 curl -u joeSchmo:1234 --location --request GET 'http://0.0.0.0:5000/mood'
 ```
-response:
+##### Response
 ```
 {
     "currentStreak": 0,
@@ -77,7 +77,8 @@ Record a new mood for the user by providing a mood from the following choices:
 * `"ROMANTIC"`
 
 A new mood will be recorded for the current date and time. Provide an optional epoch timestamp to record a mood for a different date and time.
-request:
+
+##### Request
 ```
 curl -u joeSchmo:1234 --location --request POST 'http://0.0.0.0:5000/mood' \
 --header 'Content-Type: application/json' \
@@ -86,7 +87,7 @@ curl -u joeSchmo:1234 --location --request POST 'http://0.0.0.0:5000/mood' \
     "timestamp": 1635200114
 }'
 ```
-response:
+##### Response
 ```
 {
     "currentStreak": 1,

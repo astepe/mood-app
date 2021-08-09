@@ -121,7 +121,7 @@ def calculate_streaks(new_mood: Mood) -> None:
     After incrementing the current streak, if the
     new current streak is longer than the user's
     longest streak, update the longest streak
-    and recalculate all streak rankings for all users.
+    and recalculate all streak percentiles for all users.
 
     Args:
         new_mood (Mood): The new mood being recorded for
